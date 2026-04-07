@@ -1,29 +1,30 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef } from 'react'
 import './App.css'
 
 function App() {
-  const [step, setStep] = useState<'ask' | 'success' | 'final'>( 'ask')
+  const [step, setStep] = useState<'ask' | 'success' | 'final'>('ask')
   const [phoneNumber, setPhoneNumber] = useState('')
   const [noButtonStyle, setNoButtonStyle] = useState<React.CSSProperties>({})
   const containerRef = useRef<HTMLDivElement>(null)
 
   const moveButton = () => {
-    // We'll use the entire window to move the button
     const padding = 20
-    const buttonWidth = 100
-    const buttonHeight = 50
+    const buttonWidth = 120
+    const buttonHeight = 60
     
+    // Calculate boundaries to keep button inside screen
     const maxX = window.innerWidth - buttonWidth - padding
     const maxY = window.innerHeight - buttonHeight - padding
     
+    // Generate new random position
     const randomX = Math.max(padding, Math.random() * maxX)
     const randomY = Math.max(padding, Math.random() * maxY)
     
     setNoButtonStyle({
-      position: 'fixed', // Use fixed to allow moving anywhere on screen
+      position: 'fixed',
       left: `${randomX}px`,
       top: `${randomY}px`,
-      transition: 'all 0.15s ease-out'
+      transition: 'all 0.1s cubic-bezier(0.34, 1.56, 0.64, 1)'
     })
   }
 
@@ -40,6 +41,11 @@ function App() {
 
   return (
     <div className="container" ref={containerRef}>
+      {/* Background 3D Elements */}
+      <div className="bg-circle bg-circle-1"></div>
+      <div className="bg-circle bg-circle-2"></div>
+      <div className="bg-circle bg-circle-3"></div>
+
       {step === 'ask' && (
         <div className="card fade-in">
           <h1 className="title">Boleh minta nomor telponnya? 🥺💖</h1>
@@ -50,6 +56,7 @@ function App() {
               style={noButtonStyle}
               onMouseEnter={moveButton}
               onClick={moveButton}
+              onTouchStart={moveButton}
             >
               Tdk
             </button>
@@ -77,7 +84,7 @@ function App() {
       )}
 
       {step === 'final' && (
-        <div className="card fade-in final-card">
+        <div className="card fade-in">
           <h1 className="title">Makasih banget ya! ✨</h1>
           <p className="encouragement-text">
             Semangat terus buat hari-harinya! <br />
