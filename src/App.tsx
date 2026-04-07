@@ -76,6 +76,7 @@ function App() {
       <div className="bg-element sphere-1"></div>
       <div className="bg-element sphere-2"></div>
       <div className="bg-element sphere-3"></div>
+      <div className="bg-element sphere-4"></div>
 
       {step === 'ask' && (
         <div className="card fade-in" ref={cardRef}>
