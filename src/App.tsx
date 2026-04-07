@@ -7,23 +7,50 @@ function App() {
   const [phoneNumber, setPhoneNumber] = useState('')
   const [noButtonStyle, setNoButtonStyle] = useState<React.CSSProperties>({})
   const containerRef = useRef<HTMLDivElement>(null)
+  const cardRef = useRef<HTMLDivElement>(null)
 
   const moveButton = () => {
+    if (!cardRef.current) return
+    const cardRect = cardRef.current.getBoundingClientRect()
+    
     const padding = 20
     const buttonWidth = 140
     const buttonHeight = 70
     
-    // Move anywhere on the ENTIRE screen (viewport)
+    let newX = 0
+    let newY = 0
+    let isInsideCard = true
+    
     const maxX = window.innerWidth - buttonWidth - padding
     const maxY = window.innerHeight - buttonHeight - padding
-    
-    const randomX = Math.max(padding, Math.random() * maxX)
-    const randomY = Math.max(padding, Math.random() * maxY)
+
+    // Try to find a position outside the card
+    for (let i = 0; i < 50; i++) {
+      newX = Math.max(padding, Math.random() * maxX)
+      newY = Math.max(padding, Math.random() * maxY)
+
+      // Button rect
+      const btnRight = newX + buttonWidth
+      const btnBottom = newY + buttonHeight
+
+      // Check overlap with card
+      const overlaps = !(
+        btnRight < cardRect.left || 
+        newX > cardRect.right || 
+        btnBottom < cardRect.top || 
+        newY > cardRect.bottom
+      )
+
+      if (!overlaps) {
+        isInsideCard = false
+        break
+      }
+    }
     
     setNoButtonStyle({
       position: 'fixed',
-      left: `${randomX}px`,
-      top: `${randomY}px`,
+      left: `${newX}px`,
+      top: `${newY}px`,
       transition: 'all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)',
       zIndex: 1000
     })
@@ -55,7 +82,7 @@ function App() {
       <div className="bg-element sphere-3"></div>
 
       {step === 'ask' && (
-        <div className="card fade-in">
+        <div className="card fade-in" ref={cardRef}>
           <h1 className="title">Boleh minta nomor telponnya? 🥺💖</h1>
           <div className="button-group">
             <button className="btn btn-yes" onClick={handleYes}>Iya</button>
