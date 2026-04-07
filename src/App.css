@@ -127,13 +127,6 @@
   box-shadow: 
     0 10px 0 #D1D1D1,
     0 15px 25px rgba(0,0,0,0.05);
-  animation: shake 0.5s infinite linear;
-}
-
-@keyframes shake {
-  0%, 100% { transform: rotate(0deg); }
-  25% { transform: rotate(-2deg); }
-  75% { transform: rotate(2deg); }
 }
 
 .form {
@@ -144,15 +137,16 @@
 
 .input-field {
   padding: 1.4rem;
-  background: #F4F4F4;
-  border: 3px solid transparent;
+  background: white;
+  border: 3px solid #F4F4F4;
   border-radius: 25px;
-  font-size: 1.2rem;
-  font-weight: 600;
+  font-size: 1.5rem;
+  font-weight: 800;
   color: #2D3436;
   outline: none;
   transition: all 0.3s;
   text-align: center;
+  width: 100%;
 }
 
 .input-field:focus {

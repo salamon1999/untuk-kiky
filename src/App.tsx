@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react'
+import confetti from 'canvas-confetti'
 import './App.css'
 
 function App() {
@@ -12,7 +13,7 @@ function App() {
     const buttonWidth = 140
     const buttonHeight = 70
     
-    // We want the button to stay roughly in the viewport but accessible
+    // Boundary check to keep button within viewport
     const maxX = window.innerWidth - buttonWidth - padding
     const maxY = window.innerHeight - buttonHeight - padding
     
@@ -23,12 +24,19 @@ function App() {
       position: 'fixed',
       left: `${randomX}px`,
       top: `${randomY}px`,
-      transition: 'all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)',
+      transition: 'all 0.1s cubic-bezier(0.34, 1.56, 0.64, 1)',
       zIndex: 1000
     })
   }
 
   const handleYes = () => {
+    // Fire confetti!
+    confetti({
+      particleCount: 150,
+      spread: 70,
+      origin: { y: 0.6 },
+      colors: ['#FF3B7E', '#6C5CE7', '#90DBFF', '#FF99C8']
+    })
     setStep('success')
   }
 
