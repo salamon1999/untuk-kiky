@@ -21,11 +21,12 @@ function App() {
     let newY = 0
     let attempts = 0
     
-    // Attempt to find a random position that doesn't overlap with the card
-    while (attempts < 100) {
+    // Attempt to find a random position that is STRICTLY OUTSIDE the card area
+    while (attempts < 200) {
       newX = Math.random() * (window.innerWidth - buttonWidth - padding * 2) + padding
       newY = Math.random() * (window.innerHeight - buttonHeight - padding * 2) + padding
       
+      // Check if this new position overlaps with the card (the "kota")
       const overlaps = !(
         newX + buttonWidth < cardRect.left || 
         newX > cardRect.right || 
@@ -33,12 +34,13 @@ function App() {
         newY > cardRect.bottom
       )
       
+      // If it DOES NOT overlap, we found a safe spot on the background
       if (!overlaps) break
       attempts++
     }
     
-    // If the card is too large, force to a corner
-    if (attempts >= 100) {
+    // Fallback to corners if it's hard to find a spot
+    if (attempts >= 200) {
       newX = Math.random() > 0.5 ? padding : window.innerWidth - buttonWidth - padding
       newY = Math.random() > 0.5 ? padding : window.innerHeight - buttonHeight - padding
     }
@@ -53,7 +55,6 @@ function App() {
   }
 
   const handleYes = () => {
-    // Fire confetti!
     confetti({
       particleCount: 150,
       spread: 70,
@@ -72,7 +73,6 @@ function App() {
 
   return (
     <div className="container" ref={containerRef}>
-      {/* Decorative 3D Elements */}
       <div className="bg-element sphere-1"></div>
       <div className="bg-element sphere-2"></div>
       <div className="bg-element sphere-3"></div>
