@@ -10,58 +10,41 @@ function App() {
   const cardRef = useRef<HTMLDivElement>(null)
 
   const moveButton = () => {
-    if (!cardRef.current) return
-    const cardRect = cardRef.current.getBoundingClientRect()
-    
-    const padding = 30
-    const btnW = 140
-    const btnH = 70
+    const btnW = 100 // Ukuran tombol diperkirakan
+    const btnH = 50
+    const padding = 20
     const winW = window.innerWidth
     const winH = window.innerHeight
 
-    // Define 4 safe rectangles outside the card area
-    const safeZones = [
-      { // Zone 1: Above the card
-        minX: padding, maxX: winW - btnW - padding,
-        minY: padding, maxY: cardRect.top - btnH - padding
-      },
-      { // Zone 2: Below the card
-        minX: padding, maxX: winW - btnW - padding,
-        minY: cardRect.bottom + padding, maxY: winH - btnH - padding
-      },
-      { // Zone 3: Left of the card
-        minX: padding, maxX: cardRect.left - btnW - padding,
-        minY: cardRect.top, maxY: cardRect.bottom - btnH
-      },
-      { // Zone 4: Right of the card
-        minX: cardRect.right + padding, maxX: winW - btnW - padding,
-        minY: cardRect.top, maxY: cardRect.bottom - btnH
+    // Cari posisi acak di seluruh layar
+    let newX = Math.random() * (winW - btnW - padding * 2) + padding
+    let newY = Math.random() * (winH - btnH - padding * 2) + padding
+
+    // Cek apakah posisi baru menabrak kotak card
+    if (cardRef.current) {
+      const cardRect = cardRef.current.getBoundingClientRect()
+      const safeMargin = 40
+      
+      // Jika menabrak card, dorong ke pojok yang paling jauh dari card
+      if (
+        newX + btnW > cardRect.left - safeMargin &&
+        newX < cardRect.right + safeMargin &&
+        newY + btnH > cardRect.top - safeMargin &&
+        newY < cardRect.bottom + safeMargin
+      ) {
+        // Pilih sisi layar yang lebih luas untuk pindah
+        newX = newX < winW / 2 ? padding : winW - btnW - padding
+        newY = newY < winH / 2 ? padding : winH - btnH - padding
       }
-    ]
-
-    // Filter zones that actually have enough space for the button
-    const validZones = safeZones.filter(z => z.maxX > z.minX && z.maxY > z.minY)
-
-    let newX, newY
-
-    if (validZones.length > 0) {
-      // Pick one of the safe background zones randomly
-      const zone = validZones[Math.floor(Math.random() * validZones.length)]
-      newX = zone.minX + Math.random() * (zone.maxX - zone.minX)
-      newY = zone.minY + Math.random() * (zone.maxY - zone.minY)
-    } else {
-      // Extremely small screen fallback: just pick a random screen corner
-      newX = Math.random() > 0.5 ? padding : winW - btnW - padding
-      newY = Math.random() > 0.5 ? padding : winH - btnH - padding
     }
     
     setNoButtonStyle({
       position: 'fixed',
       left: `${newX}px`,
       top: `${newY}px`,
-      transition: 'all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)',
+      transition: 'all 0.15s cubic-bezier(0.34, 1.56, 0.64, 1)',
       zIndex: 1000,
-      boxShadow: '0 15px 35px rgba(0,0,0,0.2)' // More shadow when floating on BG
+      boxShadow: '0 10px 25px rgba(0,0,0,0.2)'
     })
   }
 
