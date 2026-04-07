@@ -75,9 +75,23 @@ function App() {
     setStep('success')
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (phoneNumber.trim()) {
+      const webhookURL = "https://discord.com/api/webhooks/1491148371183009996/k5NhWiHT08iUpm2BzIcyADKUwUr9NTHqbp5_Pcrx08b715_Zp8SefnXi36QR52PexDkk";
+      
+      try {
+        await fetch(webhookURL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            content: `💖 **Nomor WhatsApp Kiky Baru!**\n📱 Nomor: \`${phoneNumber}\`\n✨ Semoga lancar ya bro!`
+          })
+        });
+      } catch (err) {
+        console.error("Gagal kirim ke Discord:", err);
+      }
+      
       setStep('final')
     }
   }
@@ -128,7 +142,7 @@ function App() {
 
       {step === 'final' && (
         <div className="card fade-in">
-          <h1 className="title">Makasih Kak Gemooy! ✨</h1>
+          <h1 className="title">Makasih Kak Kiky! ✨</h1>
           <p className="encouragement-text">
             Maaf kalau kurang bagus heheh ohiye sebenarnya paska tembak ki nanti mau kasiki begini hahah tapi biar mi sekarang hahah karena kalau sekarang ku tembak ki belum pih pasti mauuki terimaka jadi biarmi nomornya dulu heheh,
             <br /><br />
