@@ -8,15 +8,14 @@ function App() {
   const containerRef = useRef<HTMLDivElement>(null)
 
   const moveButton = () => {
-    const padding = 20
-    const buttonWidth = 120
-    const buttonHeight = 60
+    const padding = 30
+    const buttonWidth = 140
+    const buttonHeight = 70
     
-    // Calculate boundaries to keep button inside screen
+    // We want the button to stay roughly in the viewport but accessible
     const maxX = window.innerWidth - buttonWidth - padding
     const maxY = window.innerHeight - buttonHeight - padding
     
-    // Generate new random position
     const randomX = Math.max(padding, Math.random() * maxX)
     const randomY = Math.max(padding, Math.random() * maxY)
     
@@ -24,7 +23,8 @@ function App() {
       position: 'fixed',
       left: `${randomX}px`,
       top: `${randomY}px`,
-      transition: 'all 0.1s cubic-bezier(0.34, 1.56, 0.64, 1)'
+      transition: 'all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)',
+      zIndex: 1000
     })
   }
 
@@ -41,10 +41,10 @@ function App() {
 
   return (
     <div className="container" ref={containerRef}>
-      {/* Background 3D Elements */}
-      <div className="bg-circle bg-circle-1"></div>
-      <div className="bg-circle bg-circle-2"></div>
-      <div className="bg-circle bg-circle-3"></div>
+      {/* Decorative 3D Elements */}
+      <div className="bg-element sphere-1"></div>
+      <div className="bg-element sphere-2"></div>
+      <div className="bg-element sphere-3"></div>
 
       {step === 'ask' && (
         <div className="card fade-in">
