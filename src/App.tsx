@@ -1,16 +1,11 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef } from 'react'
 import confetti from 'canvas-confetti'
 import './App.css'
 
 function App() {
   const [step, setStep] = useState<'ask' | 'success' | 'final'>('ask')
   const [phoneNumber, setPhoneNumber] = useState('')
-  const [noButtonStyle, setNoButtonStyle] = useState<React.CSSProperties>({
-    position: 'fixed',
-    right: '10%',
-    top: '20%',
-    zIndex: 1000
-  })
+  const [noButtonStyle, setNoButtonStyle] = useState<React.CSSProperties>({})
   const containerRef = useRef<HTMLDivElement>(null)
   const cardRef = useRef<HTMLDivElement>(null)
 
@@ -42,7 +37,7 @@ function App() {
       attempts++
     }
     
-    // If the card is too large and takes up too much space, force to a corner
+    // If the card is too large, force to a corner
     if (attempts >= 100) {
       newX = Math.random() > 0.5 ? padding : window.innerWidth - buttonWidth - padding
       newY = Math.random() > 0.5 ? padding : window.innerHeight - buttonHeight - padding
@@ -56,13 +51,6 @@ function App() {
       zIndex: 1000
     })
   }
-
-  // Initial move outside card
-  useEffect(() => {
-    if (step === 'ask') {
-      setTimeout(moveButton, 300)
-    }
-  }, [])
 
   const handleYes = () => {
     // Fire confetti!
@@ -91,23 +79,21 @@ function App() {
       <div className="bg-element sphere-4"></div>
 
       {step === 'ask' && (
-        <>
-          <div className="card fade-in" ref={cardRef}>
-            <h1 className="title">Boleh minta nomor telponnya? 🥺💖</h1>
-            <div className="button-group">
-              <button className="btn btn-yes" onClick={handleYes}>Iya</button>
-            </div>
+        <div className="card fade-in" ref={cardRef}>
+          <h1 className="title">Boleh minta nomor telponnya? 🥺💖</h1>
+          <div className="button-group">
+            <button className="btn btn-yes" onClick={handleYes}>Iya</button>
+            <button 
+              className="btn btn-no" 
+              style={noButtonStyle}
+              onMouseEnter={moveButton}
+              onClick={moveButton}
+              onTouchStart={moveButton}
+            >
+              Tdk
+            </button>
           </div>
-          <button 
-            className="btn btn-no" 
-            style={noButtonStyle}
-            onMouseEnter={moveButton}
-            onClick={moveButton}
-            onTouchStart={moveButton}
-          >
-            Tdk
-          </button>
-        </>
+        </div>
       )}
 
       {step === 'success' && (
